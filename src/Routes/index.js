@@ -20,12 +20,11 @@ import UserNotActiveScreen from "../pages/UserNotActiveScreen";
 // PAGES DE ADMIN
 import HomeScreenAdmin from "../pages/admin/HomeScreen";
 import ForagidosScreenAdmin from "../pages/admin/ForagidosScreen";
-// import DetalhesScreenAdmin from "../pages/admin/ForagidosScreen/DetalhesScreen";
 import ConsultaScreenAdmin from "../pages/admin/ConsultaScreen";
 import DenunciaScreenAdmin from "../pages/admin/DenunciaScreen";
 import DetailsScreenAdmin from "../pages/admin/DetailsScreen";
 import ProfileScreenAdmin from "../pages/admin/ProfileScreen";
-// import SettingsScreenAdmin from "../pages/admin/SettingsScreen";
+
 // PAGES DE COMISSÃO
 import HomeScreenComissao from "../pages/comissao/HomeScreen";
 
@@ -52,8 +51,8 @@ const Routes = () => {
   }, [auth.auth])
 
   const buscaSession = async () => {
-    const user_cpf = await AsyncStorage.getItem(`@SIPEforagidos:usuario_cpf`)
-    const user_token = await AsyncStorage.getItem(`@SIPEforagidos:usuario_token`)
+    const user_cpf = await AsyncStorage.getItem(`@SWR:usuario_cpf`)
+    const user_token = await AsyncStorage.getItem(`@SWR:usuario_token`)
     setCpf(user_cpf)
     setToken(user_token)
   }

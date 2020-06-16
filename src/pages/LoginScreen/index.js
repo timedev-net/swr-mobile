@@ -1,19 +1,16 @@
 
 import React, {useState, useEffect} from 'react';
 import {View, KeyboardAvoidingView, Text, Image, TextInput, StyleSheet, TouchableOpacity, Animated} from 'react-native'
-// import { Container, Header, Content, Item, Input, Button, Text } from 'native-base';
 import styles from './styles'
-import api from '../../services/api'
 import { bindActionCreators } from 'redux';
 import * as authActions from '../../store/reducers/auth/authReducer';
 import { connect, useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { auth_login, api_interno_foragidos, header_sem_token } from  '../../services/api'
+import { auth_login } from  '../../services/api'
 import axios from 'axios';
 import { Snackbar } from 'react-native-paper';
-import { setSession, getSession } from '../../services/asyncStorage'
 
 function LoginScreen({ navigation, route, loginAction, logoutAction }) {
   // const { itemId, otherParam } = route.params;
@@ -38,11 +35,11 @@ function LoginScreen({ navigation, route, loginAction, logoutAction }) {
         "cpf": formik.values.cpf,
         "password": formik.values.senha
       })  
-      if (resposta.data.user.active == 1) {
+      if (resposta.data.user.ativado == 1) {
         // aqui a gente armazena no asyncStorage o token recebido na autenticação 
 
-        resposta.data.data.token && await AsyncStorage.setItem('@SIPEforagidos:usuario_token', resposta.data.data.token)
-        formik.values.cpf        && await AsyncStorage.setItem('@SIPEforagidos:usuario_cpf', formik.values.cpf)
+        resposta.data.data.token && await AsyncStorage.setItem('@SWR:usuario_token', resposta.data.data.token)
+        formik.values.cpf        && await AsyncStorage.setItem('@SWR:usuario_cpf', formik.values.cpf)
       }
       loginAction(formik.values.cpf, resposta.data.data.token, resposta.data.user.active == 1? true : false)
     } catch {
@@ -53,11 +50,11 @@ function LoginScreen({ navigation, route, loginAction, logoutAction }) {
 
   async function solicitaAcesso() {
     console.log('solicita acesso')
-    const teste = await AsyncStorage.getItem('@SIPEforagidos:usuario_token')
+    const teste = await AsyncStorage.getItem('@SWR:usuario_token')
     console.log(teste)
     await AsyncStorage.clear()
     logoutAction()
-    const teste2 = await AsyncStorage.getItem('@SIPEforagidos:usuario_token')
+    const teste2 = await AsyncStorage.getItem('@SWR:usuario_token')
     console.log(teste2)
   }
 
@@ -99,8 +96,8 @@ function LoginScreen({ navigation, route, loginAction, logoutAction }) {
           { translateY: offset.y }
         ]
       }]}>
-          <TextInput style={styles.input} placeholder='CPF' autoCorrect={false} onChangeText={(value) => {formik.setFieldValue('cpf', value)}} />
-          <TextInput style={styles.input} placeholder="Senha" autoCorrect={false} onChangeText={(value) => {formik.setFieldValue('senha', value)}} />
+          <TextInput textContentType='username' keyboardType='number-pad' style={styles.input} placeholder='CPF' autoCorrect={false} onChangeText={(value) => {formik.setFieldValue('cpf', value)}} />
+          <TextInput textContentType='password' secureTextEntry={true} style={styles.input} placeholder="Senha" autoCorrect={false} onChangeText={(value) => {formik.setFieldValue('senha', value)}} />
         <TouchableOpacity onPress={login} style={styles.btnLogin} rounded light>
           <Text style={styles.loginText}>Entrar</Text>
         </TouchableOpacity>
