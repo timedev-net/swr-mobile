@@ -60,21 +60,19 @@ function HomeScreen({ navigation, snackbar }) {
     return (
       <View style={styles.colorBackground}>
       
-        <Appbar.Header>
+        <Appbar.Header style={{ justifyContent: 'space-between', backgroundColor: theme_dark.colors.drawer }}>
           {/* <Appbar.BackAction onPress={goBack} /> */}
           <Appbar.Action icon="menu" onPress={() => navigation.toggleDrawer()}/>
-          <Appbar.Content title="SIPE" subtitle="Sistema de Informação Penitenciária"/>
+          <Image style={{ width: 191, height: 36 }} source={require('../../../assets/logos/topbar-verde.png')} />
+          {/* <Appbar.Content title="WR Ambiental" subtitle="Sistema de cadastro de coletas"/> */}
           {/* <Appbar.Action icon="magnify" onPress={handleSearch}/> */}
           <Appbar.Action icon="dots-vertical" onPress={handleMore}/>
         </Appbar.Header>
       
         <View style={{ padding: 10}}>
           <Surface style={{justifyContent: 'center', alignItems: 'center'}}>
-            <Image style={{
-                  width: '90%',
-                  height: '90%'
-                }} source={require('../../../assets/g1304.png')} />
-                <Title style={{ fontSize: 25,  }}>FORAGIDOS</Title>
+            {/* <Image style={{ width: '90%', height: '90%' }} source={require('../../../assets/g1304.png')} /> */}
+                {/* <Title style={{ fontSize: 25,  }}>FORAGIDOS</Title> */}
           </Surface>
         
          {/* <Title>Página de detalhes</Title> */}

@@ -2,6 +2,7 @@
 import React, {useEffect} from 'react';
 import { View, Button, Text, Image, StatusBar } from 'react-native'
 import { StyleSheet } from 'react-native'
+import { theme_default, theme_dark } from '../../theme'
 
 
 
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#191919'
+    backgroundColor: theme_dark.colors.drawer
   },
   titulo: {
     color: '#fff',

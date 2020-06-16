@@ -1,11 +1,12 @@
 import { StyleSheet } from 'react-native'
+import { theme_default, theme_dark } from '../../theme'
 
 const styles = StyleSheet.create({
   background: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#101010'
+    backgroundColor: theme_dark.colors.drawer
   },
   containerLogo: {
     flex: 1,

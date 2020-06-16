@@ -20,7 +20,7 @@ export const theme_dark = {
     primary: '#3498db',
     accent: '#f1c40f',
     background: '#010101',
-    drawer: '#333',
+    drawer: '#121',
     text: '#fff'
   },
 };

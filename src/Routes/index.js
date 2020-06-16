@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { bindActionCreators } from 'redux';
 import { loginAction, logoutAction } from '../store/reducers/auth/authReducer';
 // import { connect, useDispatch } from 'react-redux';
+import { theme_default, theme_dark } from '../theme'
 
 // import AsyncStorage from '@react-native-community/async-storage';
 
@@ -85,15 +86,15 @@ const Routes = () => {
     // ROTAS DE ADMINISTRADOR
     (<>
       <NavigationContainer>
-        <StatusBar barStyle="dark-content" />
+        <StatusBar barStyle="#fff" backgroundColor={theme_dark.colors.drawer} />
         <Drawer.Navigator drawerContent={props => <CustomDrawerContent {...props} />}>
           <Drawer.Screen name="Home" component={HomeScreenAdmin} />
           {/* <Drawer.Screen name="Foragidos1" component={ForagidosScreenAdmin} /> */}
-          <Drawer.Screen name="Foragidos" component={ForagidosRoutes} />
+          <Drawer.Screen name="Coleta" component={ForagidosRoutes} />
           {/* <Drawer.Screen name="Consulta" component={ConsultaScreenAdmin} options={{title: 'Consulta'}} /> */}
-          <Drawer.Screen name="Denuncia" component={DenunciaScreenAdmin} />
+          <Drawer.Screen name="Destinação" component={DenunciaScreenAdmin} />
           {/* <Drawer.Screen name="Detalhes" component={DetalhesScreenAdmin} /> */}
-          <Drawer.Screen name="Testeee" component={HomeRoutes} />
+          <Drawer.Screen name="Sobre a Empresa" component={HomeRoutes} />
         </Drawer.Navigator>
       </NavigationContainer>
     </>

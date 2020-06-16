@@ -31,9 +31,9 @@ function CustomDrawerContent(props) {
     return (
       <>
         <View style={styles.cabecalho}>
-          <Image style={styles.image} source={require('../../../src/assets/g1304.png')} />
-          <Text style={styles.text1}>SIPE</Text>
-          <Text style={styles.text2}>Sistema de Informação Penitenciária</Text>
+          <Image style={styles.image} source={require('../../../src/assets/logotipo-vertical-verde.png')} />
+          {/* <Text style={styles.text1}>SIPE</Text> */}
+          {/* <Text style={styles.text2}>Sistema de Informação Penitenciária</Text> */}
           {/* <Logo /> */}
         </View>
         <DrawerContentScrollView {...props} style={styles.colorDrawer}>
