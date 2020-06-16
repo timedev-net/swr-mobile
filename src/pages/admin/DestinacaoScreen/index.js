@@ -13,7 +13,7 @@ import { api_interno_foragidos } from  '../../../services/api'
 import { useSelector } from 'react-redux';
 
 
-function HomeScreen({ navigation, snackbar }) {
+function DestinacaoScreen({ navigation, snackbar }) {
 
   const [count, setCount] = useState(0);
   const [snack, setSnack] = useState(false);
@@ -117,7 +117,7 @@ controlar transferências, processos e demais atividades relacionadas ao sistema
     );
 }
 
-export default HomeScreen;
+export default DestinacaoScreen;
 
 // const mapStateToProps = state => (state.auth);
 // const mapDispatchToProps = dispatch => bindActionCreators(authActions, dispatch);
