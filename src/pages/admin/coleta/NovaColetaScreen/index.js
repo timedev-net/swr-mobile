@@ -2,21 +2,21 @@
 import React, { useEffect, useState } from 'react';
 import { View, StatusBar, ScrollView, Image } from 'react-native'
 import { Appbar, Card, Button as Button2 } from 'react-native-paper';
-import { theme_default, theme_dark } from '../../../theme'
+import { theme_default, theme_dark } from '../../../../theme'
 import { Icon } from 'react-native-elements'
 import styles from './styles'
 import { Snackbar } from 'react-native-paper';
 import { Avatar, Title, Paragraph, Divider, Surface, TextInput } from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
-import { api_interno_foragidos } from '../../../services/api'
+import { api_interno_foragidos } from '../../../../services/api'
 import { useSelector } from 'react-redux';
 import { Container, Header, Content, Form, DatePicker, Picker, Text, Item, Input, Label, CheckBox, Body, ListItem, Radio, Right, Left, Button } from 'native-base';
 // import {Picker} from '@react-native-community/picker';
 
 
 
-function ColetaScreen({ navigation, snackbar }) {
+function NovaColetaScreen({ navigation, snackbar }) {
 
   const auth = useSelector(state => state.auth)
   // const [snack, setSnack] = useState(false);
@@ -67,7 +67,7 @@ function ColetaScreen({ navigation, snackbar }) {
       <Appbar.Header style={{ justifyContent: 'space-between', backgroundColor: theme_dark.colors.drawer }}>
         {/* <Appbar.BackAction onPress={goBack} /> */}
         <Appbar.Action icon="menu" onPress={() => navigation.toggleDrawer()} />
-        <Image style={{ width: 191, height: 36 }} source={require('../../../assets/logos/topbar-verde.png')} />
+        <Image style={{ width: 191, height: 36 }} source={require('../../../../assets/logos/topbar-verde.png')} />
         {/* <Appbar.Content title="WR Ambiental" subtitle="Sistema de cadastro de coletas"/> */}
         {/* <Appbar.Action icon="magnify" onPress={handleSearch}/> */}
         <Appbar.Action icon="dots-vertical" onPress={handleMore} />
@@ -205,4 +205,4 @@ function ColetaScreen({ navigation, snackbar }) {
   );
 }
 
-export default ColetaScreen;
+export default NovaColetaScreen;

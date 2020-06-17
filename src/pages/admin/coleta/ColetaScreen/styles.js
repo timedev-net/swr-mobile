@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import { theme_default, theme_dark } from '../../../theme'
+import { theme_default, theme_dark } from '../../../../theme'
 
 const styles = StyleSheet.create({
   colorBackground: { flex: 1, backgroundColor: theme_dark.colors.background },

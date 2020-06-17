@@ -20,7 +20,6 @@ import SplashScreen from "../pages/SplashScreen";
 import UserNotActiveScreen from "../pages/UserNotActiveScreen";
 // PAGES DE ADMIN
 import HomeScreenAdmin from "../pages/admin/HomeScreen";
-import ColetaScreenAdmin from "../pages/admin/ColetaScreen";
 import DestinacaoScreenAdmin from "../pages/admin/DestinacaoScreen";
 import SobreEmpresaScreenAdmin from "../pages/admin/SobreEmpresaScreen";
 // import ForagidosScreenAdmin from "../pages/admin/ForagidosScreen";
@@ -34,6 +33,7 @@ import HomeScreenComissao from "../pages/comissao/HomeScreen";
 
 import HomeRoutes from './home.routes'
 import ForagidosRoutes from './foragidos.routes'
+import ColetaRoutes from './coleta.routes'
 import { useSelector, useDispatch } from 'react-redux';
 
 const Stack = createStackNavigator();
@@ -93,7 +93,7 @@ const Routes = () => {
         <Drawer.Navigator drawerContent={props => <CustomDrawerContent {...props} />}>
           <Drawer.Screen name="Home" component={HomeScreenAdmin} />
           {/* <Drawer.Screen name="Foragidos1" component={ForagidosScreenAdmin} /> */}
-          <Drawer.Screen name="Coleta" component={ColetaScreenAdmin} />
+          <Drawer.Screen name="Coleta" component={ColetaRoutes} />
           {/* <Drawer.Screen name="Consulta" component={ConsultaScreenAdmin} options={{title: 'Consulta'}} /> */}
           <Drawer.Screen name="Destinação" component={DestinacaoScreenAdmin} />
           {/* <Drawer.Screen name="Detalhes" component={DetalhesScreenAdmin} /> */}
