@@ -9,8 +9,8 @@ import { bindActionCreators } from 'redux';
 import { loginAction, logoutAction } from '../store/reducers/auth/authReducer';
 // import { connect, useDispatch } from 'react-redux';
 import { theme_default, theme_dark } from '../theme'
+import { useSelector, useDispatch } from 'react-redux';
 
-// import AsyncStorage from '@react-native-community/async-storage';
 
 // COMPONENTS
 import LogoTitle from "../components/LogoTitle";
@@ -20,21 +20,15 @@ import SplashScreen from "../pages/SplashScreen";
 import UserNotActiveScreen from "../pages/UserNotActiveScreen";
 // PAGES DE ADMIN
 import HomeScreenAdmin from "../pages/admin/HomeScreen";
-import DestinacaoScreenAdmin from "../pages/admin/DestinacaoScreen";
 import SobreEmpresaScreenAdmin from "../pages/admin/SobreEmpresaScreen";
-// import ForagidosScreenAdmin from "../pages/admin/ForagidosScreen";
-// import ConsultaScreenAdmin from "../pages/admin/ConsultaScreen";
-// import DenunciaScreenAdmin from "../pages/admin/DenunciaScreen";
-// import DetailsScreenAdmin from "../pages/admin/DetailsScreen";
-// import ProfileScreenAdmin from "../pages/admin/ProfileScreen";
+
 
 // PAGES DE COMISSÃO
 import HomeScreenComissao from "../pages/comissao/HomeScreen";
 
-import HomeRoutes from './home.routes'
-import ForagidosRoutes from './foragidos.routes'
+
 import ColetaRoutes from './coleta.routes'
-import { useSelector, useDispatch } from 'react-redux';
+import DestinacaoRoutes from './destinacao.routes'
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -95,7 +89,7 @@ const Routes = () => {
           {/* <Drawer.Screen name="Foragidos1" component={ForagidosScreenAdmin} /> */}
           <Drawer.Screen name="Coleta" component={ColetaRoutes} />
           {/* <Drawer.Screen name="Consulta" component={ConsultaScreenAdmin} options={{title: 'Consulta'}} /> */}
-          <Drawer.Screen name="Destinação" component={DestinacaoScreenAdmin} />
+          <Drawer.Screen name="Destinação" component={DestinacaoRoutes} />
           {/* <Drawer.Screen name="Detalhes" component={DetalhesScreenAdmin} /> */}
           <Drawer.Screen name="Sobre a Empresa" component={SobreEmpresaScreenAdmin} />
         </Drawer.Navigator>

@@ -16,7 +16,7 @@ import { Container, Header, Content, Form, DatePicker, Picker, Text, Item, Input
 
 
 
-function NovaColetaScreen({ navigation, snackbar }) {
+function NovaDestinacaoScreen({ navigation, snackbar }) {
 
   const auth = useSelector(state => state.auth)
   // const [snack, setSnack] = useState(false);
@@ -77,7 +77,7 @@ function NovaColetaScreen({ navigation, snackbar }) {
         <Card>
           {/* <Card.Cover source={{ uri: 'http://www.nueva-iso-14001.com/wp-content/uploads/2018/10/pol%C3%ADtica-ambiental.jpg' }} /> */}
           <Card.Content style={{ backgroundColor: theme_dark.colors.drawer }}>
-            <Title>Nova Coleta</Title>
+            <Title>Nova Destinação</Title>
             <Title style={{ fontSize: 14, }}>Preencha corretamente o formulário</Title>
             <Divider style={{ marginBottom: 10, paddingBottom: 2 }} />
 
@@ -205,4 +205,4 @@ function NovaColetaScreen({ navigation, snackbar }) {
   );
 }
 
-export default NovaColetaScreen;
+export default NovaDestinacaoScreen;

@@ -14,7 +14,7 @@ import { Container, Header, Content, Form, DatePicker, Picker, Text, Item, Input
 
 
 
-function ColetaScreen({ navigation, snackbar }) {
+function DestinacaoScreen({ navigation, snackbar }) {
 
   const auth = useSelector(state => state.auth)
   // const [snack, setSnack] = useState(false);
@@ -75,7 +75,7 @@ function ColetaScreen({ navigation, snackbar }) {
         {/* <Appbar.Action icon="dots-vertical" onPress={handleMore} /> */}
         
           <Menu visible={menuVisible} onDismiss={() => setMenuVisible(false)} anchor={<Appbar.Action icon="dots-vertical" color='#fff' onPress={handleMore} />} >
-            <Menu.Item onPress={() => {navigation.navigate('NovaColetaScreen'), setMenuVisible(false)}} title="Nova Coleta" />
+            <Menu.Item onPress={() => {navigation.navigate('NovaDestinacaoScreen'), setMenuVisible(false)}} title="Nova Destinação" />
             {/* <Menu.Item onPress={() => {}} title="+ Destinação" /> */}
             {/* <Divider /> */}
             {/* <Menu.Item onPress={() => {}} title="Sobre" /> */}
@@ -89,17 +89,18 @@ function ColetaScreen({ navigation, snackbar }) {
         <Card>
           {/* <Card.Cover source={{ uri: 'http://www.nueva-iso-14001.com/wp-content/uploads/2018/10/pol%C3%ADtica-ambiental.jpg' }} /> */}
           <Card.Content style={{ backgroundColor: theme_dark.colors.drawer }}>
-            <Title>Lista de Coletas</Title>
+            <Title>Lista de Destinações</Title>
             {/* <Title style={{ fontSize: 14, }}>Preencha corretamente o formulário</Title> */}
             <Divider style={{ marginBottom: 10, paddingBottom: 2 }} />
 
             <List.AccordionGroup>
-                <List.Accordion title="Coleta 01 - 10/02/2020" id="1">
-                  <List.Item title="Descrição da coleta" />
+                <List.Accordion title="Destinação 01 - 11/03/2020" id="1">
+                  <List.Item title="Descrição da destinação 1" />
                   <ButtonPaper>+ Produto</ButtonPaper>
                 </List.Accordion>
-                <List.Accordion title="Coleta 02 - 15/02/2020" id="2">
-                  <List.Item title="Oleo Vegetal - 100 Lts" />
+                <List.Accordion title="Destinação 02 - 22/04/2020" id="2">
+                  <List.Item title="Oleo Mineral - 250 Lts" />
+                  <List.Item title="Oleo Vegetal - 120 Lts" />
                   <ButtonPaper>+ Produto</ButtonPaper>
                 </List.Accordion>
                 {/* <View>
@@ -129,4 +130,4 @@ function ColetaScreen({ navigation, snackbar }) {
   );
 }
 
-export default ColetaScreen;
+export default DestinacaoScreen;

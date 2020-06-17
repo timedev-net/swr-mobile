@@ -36,7 +36,7 @@ function SobreEmpresaScreen({ navigation, snackbar }) {
 
       <ScrollView style={{ padding: 10 }}>
         {/* <Title>Saiba mais sobre a Empresa</Title> */}
-        <Card style={{ marginHorizontal: 15, marginTop: 20 }}>
+        <Card>
           <Card.Cover source={{ uri: 'http://www.nueva-iso-14001.com/wp-content/uploads/2018/10/pol%C3%ADtica-ambiental.jpg' }} />
           <Card.Content style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: theme_dark.colors.drawer }}>
 
