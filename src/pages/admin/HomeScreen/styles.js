@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
   // image: { width: 60, height: 70 },
   // text1: { color: theme_dark.colors.text, fontSize: 60, fontWeight: 'bold', paddingLeft: 20},
   // text2: { color: theme_dark.colors.text, fontSize: 14, paddingTop: 8},
-  card: { width: 190, backgroundColor: theme_dark.colors.drawer, justifyContent: 'center', alignItems: 'center', margin: 5, padding: 5 }
+  card: { width: 180, backgroundColor: theme_dark.colors.drawer, justifyContent: 'center', alignItems: 'center', margin: 5, padding: 5 }
 })
 
 export default styles;

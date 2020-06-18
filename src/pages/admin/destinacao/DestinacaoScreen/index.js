@@ -95,12 +95,12 @@ function DestinacaoScreen({ navigation, snackbar }) {
 
             <List.AccordionGroup>
                 <List.Accordion title="Destinação 01 - 11/03/2020" id="1">
-                  <List.Item title="Descrição da destinação 1" />
+                  <List.Item title="Descrição da destinação 1" style={{ marginLeft: 20 }} />
                   <ButtonPaper>+ Produto</ButtonPaper>
                 </List.Accordion>
                 <List.Accordion title="Destinação 02 - 22/04/2020" id="2">
-                  <List.Item title="Oleo Mineral - 250 Lts" />
-                  <List.Item title="Oleo Vegetal - 120 Lts" />
+                  <List.Item title="Oleo Mineral - 250 Lts" style={{ marginLeft: 20 }} />
+                  <List.Item title="Oleo Vegetal - 120 Lts" style={{ marginLeft: 20 }}/>
                   <ButtonPaper>+ Produto</ButtonPaper>
                 </List.Accordion>
                 {/* <View>

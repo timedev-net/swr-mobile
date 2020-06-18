@@ -95,11 +95,11 @@ function ColetaScreen({ navigation, snackbar }) {
 
             <List.AccordionGroup>
                 <List.Accordion title="Coleta 01 - 10/02/2020" id="1">
-                  <List.Item title="Descrição da coleta" />
+                  <List.Item title="Descrição da coleta" style={{ marginLeft: 20 }} />
                   <ButtonPaper>+ Produto</ButtonPaper>
                 </List.Accordion>
                 <List.Accordion title="Coleta 02 - 15/02/2020" id="2">
-                  <List.Item title="Oleo Vegetal - 100 Lts" />
+                  <List.Item title="Oleo Vegetal - 100 Lts" style={{ marginLeft: 20 }} />
                   <ButtonPaper>+ Produto</ButtonPaper>
                 </List.Accordion>
                 {/* <View>
