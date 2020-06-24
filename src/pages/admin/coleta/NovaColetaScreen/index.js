@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { View, StatusBar, ScrollView, Image } from 'react-native'
+import { View, StatusBar, ScrollView, Image, Button as BtnRN } from 'react-native'
 import { Appbar, Card, Button as Button2 } from 'react-native-paper';
 import { theme_default, theme_dark } from '../../../../theme'
 import { Icon } from 'react-native-elements'
@@ -13,6 +13,7 @@ import { api_interno_foragidos } from '../../../../services/api'
 import { useSelector } from 'react-redux';
 import { Container, Header, Content, Form, DatePicker, Picker, Text, Item, Input, Label, CheckBox, Body, ListItem, Radio, Right, Left, Button } from 'native-base';
 // import {Picker} from '@react-native-community/picker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 
 
@@ -20,8 +21,28 @@ function NovaColetaScreen({ navigation, snackbar }) {
 
   const auth = useSelector(state => state.auth)
   // const [snack, setSnack] = useState(false);
-  const [date, setDate] = useState();
+  // const [date, setDate] = useState();
   const [piker1, setPiker1] = useState();
+
+//********************************** */
+
+  const [date, setDate] = useState(new Date(1598051730000));
+  const [time, setTime] = useState(new Date(1598051730000));
+  const [showDatepicker, setShowDatepicker] = useState(false);
+  const [showTimepicker, setShowTimepicker] = useState(false);
+
+  const onChangeDate = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === 'ios');
+    setDate(currentDate);
+  };
+  const onChangeTime = (event, selectedTime) => {
+    const currentTime = selectedTime || time;
+    setShow(Platform.OS === 'ios');
+    setTime(currentTime);
+  };
+
+  //********************************************* */
 
   // goBack = () => console.log('Went back');
   // handleSearch = () => console.log('Searching');
@@ -83,24 +104,31 @@ function NovaColetaScreen({ navigation, snackbar }) {
 
             <Form>
               <Item rounded last style={{ marginBottom: 10, height: 50 }}>
-                {/* <Label>Data da Coleta:</Label> */}
-                <DatePicker
-                  // defaultDate={new Date(2018, 4, 4)}
-                  // minimumDate={new Date(2018, 1, 1)}
-                  // maximumDate={new Date(2018, 12, 31)}
-                  // locale={"pt"}
-                  // timeZoneOffsetInMinutes={undefined}
-                  modalTransparent={false}
-                  animationType={"fade"}
-                  androidMode={"default"}
-                  placeHolderText="Data da coleta"
-                  // textStyle={{ color: "green" }}
-                  placeHolderTextStyle={{ color: "#777" }}
-                  onDateChange={setDate}
-                  disabled={false}
-                >
-                  
-                </DatePicker>
+                <Label>Data</Label>
+                {showDatepicker && (
+                  <DateTimePicker
+                    testID="datePicker"
+                    value={date}
+                    mode={'date'}
+                    is24Hour={true}
+                    display="default"
+                    onChange={onChangeDate}
+                  />
+                )}
+              </Item>
+
+              <Item rounded last style={{ marginBottom: 10, height: 50 }} onPress={() => {setShowTimepicker(true)}}>
+                <Label>Hora</Label>
+                {showTimepicker && (
+                  <DateTimePicker
+                    testID="timePicker"
+                    value={time}
+                    mode={'time'}
+                    is24Hour={true}
+                    display="default"
+                    onChange={onChangeTime}
+                  />
+                )}
               </Item>
 
               <Item rounded last style={{ marginBottom: 10 }}>
