@@ -31,7 +31,11 @@ export const auth_register = `${baseUrl}/auth/register`;
 export const auth_login = `${baseUrl}/auth/login`;
 export const api_admin_usuarios = `${baseUrl}/admin/usuarios`;
 
-export const api_interno_foragidos = `${baseUrl}/interno/foragidos`;
+
+export const api_coleta = `${baseUrl}/admin/coleta`;
+export const api_coleta_produto = `${baseUrl}/admin/coleta_produto`;
+export const api_destinacao = `${baseUrl}/admin/destinacao`;
+export const api_destinacao_produto = `${baseUrl}/admin/destinacao_produto`;
 
 // export const api_admin_acusado_simple_show = `${baseUrl}/admin/pessoa/acusado_simple_show`;
 export const api_admin_servidoresgeral             = `http://sgrh.sejus.ro.gov.br/carregaservidores`;

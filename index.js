@@ -14,7 +14,7 @@ import { theme_default, theme_dark } from './src/theme'
 export default function Main() {
   return (
     <StoreProvider store={store}>
-      <PaperProvider theme={theme_dark}>
+      <PaperProvider theme={theme_default}>
         <App />
       </PaperProvider>
     </StoreProvider>

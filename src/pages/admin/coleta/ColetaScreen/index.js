@@ -1,11 +1,12 @@
 
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
-import { api_interno_foragidos } from '../../../../services/api'
+import { api_coleta, api_coleta_produto } from '../../../../services/api'
 import { theme_default, theme_dark } from '../../../../theme'
 import { useSelector } from 'react-redux';
 import styles from './styles'
 import axios from 'axios';
+import moment from 'moment';
 
 import { View, StatusBar, ScrollView, Image } from 'react-native'
 import { Icon } from 'react-native-elements'
@@ -21,11 +22,11 @@ function ColetaScreen({ navigation, snackbar }) {
   const [date, setDate] = useState();
   const [piker1, setPiker1] = useState();
   const [menuVisible, setMenuVisible] = useState(false);
+  const [dadosColeta, setDadosColeta] = useState();
 
   // goBack = () => console.log('Went back');
   // handleSearch = () => console.log('Searching');
   const handleMore = () => {
-    console.log('Shown more');
     setMenuVisible(!menuVisible)
   }
 
@@ -44,15 +45,15 @@ function ColetaScreen({ navigation, snackbar }) {
   // }, [navigation, setCount]);
 
 
-  const teste = async () => {
+  const busca_dados = async () => {
     try {
-      const res = await axios.get(api_interno_foragidos, {
+      const res = await axios.get(api_coleta, {
         headers: {
           'X-Requested-With': 'XMLHttpRequest',
           'Authorization': `bearer ${auth.auth.token}`
         }
       })
-      console.log(res)
+      setDadosColeta(res.data)  
     } catch (error) {
       console.log(error)
     }
@@ -63,10 +64,14 @@ function ColetaScreen({ navigation, snackbar }) {
     console.log(token)
   };
 
+  useEffect(() => {
+    busca_dados()
+  }, []);
+
   return (
     <View style={styles.colorBackground}>
 
-      <Appbar.Header style={{ justifyContent: 'space-between', backgroundColor: theme_dark.colors.drawer }}>
+      <Appbar.Header style={{ justifyContent: 'space-between', backgroundColor: '#fff' }}>
         {/* <Appbar.BackAction onPress={goBack} /> */}
         <Appbar.Action icon="menu" onPress={() => navigation.toggleDrawer()} />
         <Image style={{ width: 191, height: 36 }} source={require('../../../../assets/logos/topbar-verde.png')} />
@@ -74,7 +79,7 @@ function ColetaScreen({ navigation, snackbar }) {
         {/* <Appbar.Action icon="magnify" onPress={handleSearch}/> */}
         {/* <Appbar.Action icon="dots-vertical" onPress={handleMore} /> */}
         
-          <Menu visible={menuVisible} onDismiss={() => setMenuVisible(false)} anchor={<Appbar.Action icon="dots-vertical" color='#fff' onPress={handleMore} />} >
+          <Menu visible={menuVisible} onDismiss={() => setMenuVisible(false)} anchor={<Appbar.Action icon="dots-vertical" color='#365025' onPress={handleMore} />} >
             <Menu.Item onPress={() => {navigation.navigate('NovaColetaScreen'), setMenuVisible(false)}} title="Nova Coleta" />
             {/* <Menu.Item onPress={() => {}} title="+ Destinação" /> */}
             {/* <Divider /> */}
@@ -88,28 +93,24 @@ function ColetaScreen({ navigation, snackbar }) {
       <ScrollView style={{ padding: 10 }}>
         <Card>
           {/* <Card.Cover source={{ uri: 'http://www.nueva-iso-14001.com/wp-content/uploads/2018/10/pol%C3%ADtica-ambiental.jpg' }} /> */}
-          <Card.Content style={{ backgroundColor: theme_dark.colors.drawer }}>
+          <Card.Content style={{ backgroundColor: theme_default.colors.drawer }}>
             <Title>Lista de Coletas</Title>
             {/* <Title style={{ fontSize: 14, }}>Preencha corretamente o formulário</Title> */}
             <Divider style={{ marginBottom: 10, paddingBottom: 2 }} />
 
             <List.AccordionGroup>
-                <List.Accordion title="Coleta 01 - 10/02/2020" id="1">
-                  <List.Item title="Descrição da coleta" style={{ marginLeft: 20 }} />
-                  <ButtonPaper>+ Produto</ButtonPaper>
-                </List.Accordion>
-                <List.Accordion title="Coleta 02 - 15/02/2020" id="2">
-                  <List.Item title="Oleo Vegetal - 100 Lts" style={{ marginLeft: 20 }} />
-                  <ButtonPaper>+ Produto</ButtonPaper>
-                </List.Accordion>
-                {/* <View>
-                  <Text>
-                    List.Accordion can be wrapped because implementation uses React.Context.
-                  </Text>
-                  <List.Accordion title="Accordion 3" id="3">
-                    <List.Item title="Item 3" />
+              {dadosColeta? dadosColeta.map((coleta, idx) => (
+                <View>
+                  <List.Accordion key={coleta.id} title={`${moment(coleta.data).format('DD/MM/YYYY')} - ${coleta.cliente.nome}`} id="1">
+                    {coleta?.produto_coleta? coleta.produto_coleta.map((produto, indice) => (
+                      <List.Item key={produto.id} title={`${indice+1}. ${produto.produto.nome} (${produto.quantidade} ${produto.tipo_medida.nome_tipo})`} style={{ marginLeft: 20 }} />
+                    )) : null}
+                    <ButtonPaper onPress={() => {navigation.navigate('NovoProdutoScreen', { coleta_id: coleta.id })}}>+ Produto</ButtonPaper>
+                    {/* <ButtonPaper>Detalhes</ButtonPaper> */}
                   </List.Accordion>
-                </View> */}
+                  <Divider />
+                </View>
+              )) : null}
               </List.AccordionGroup>
             
 

@@ -9,7 +9,7 @@ import { Snackbar } from 'react-native-paper';
 import { Avatar, Title, Paragraph, Divider, Surface } from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
-import { api_interno_foragidos } from '../../../services/api'
+import { api_coleta, api_coleta_produto } from '../../../services/api'
 import { useSelector } from 'react-redux';
 
 
@@ -21,7 +21,7 @@ function HomeScreen({ navigation, snackbar }) {
 
   // goBack = () => console.log('Went back');
   // handleSearch = () => console.log('Searching');
-  const handleMore = () => console.log('Shown more');
+  // const handleMore = () => console.log('Shown more');
 
 
 
@@ -40,7 +40,7 @@ function HomeScreen({ navigation, snackbar }) {
 
   const teste = async () => {
     try {
-      const res = await axios.get(api_interno_foragidos, {
+      const res = await axios.get(api_coleta, {
         headers: {
           'X-Requested-With': 'XMLHttpRequest',
           'Authorization': `bearer ${auth.auth.token}`
@@ -57,34 +57,38 @@ function HomeScreen({ navigation, snackbar }) {
     console.log(token)
   };
 
+  // useEffect(() => {
+  //   teste()
+  // }, []);
+
   return (
     <View style={styles.colorBackground}>
 
-      <Appbar.Header style={{ justifyContent: 'space-between', backgroundColor: theme_dark.colors.drawer }}>
+      <Appbar.Header style={{ justifyContent: 'space-between', backgroundColor: '#fff' }}>
         {/* <Appbar.BackAction onPress={goBack} /> */}
         <Appbar.Action icon="menu" onPress={() => navigation.toggleDrawer()} />
         <Image style={{ width: 191, height: 36 }} source={require('../../../assets/logos/topbar-verde.png')} />
         {/* <Appbar.Content title="WR Ambiental" subtitle="Sistema de cadastro de coletas"/> */}
         {/* <Appbar.Action icon="magnify" onPress={handleSearch}/> */}
-        <Appbar.Action icon="dots-vertical" onPress={handleMore} />
+        <Appbar.Action />
       </Appbar.Header>
 
 
-      <Title style={{ padding: 10 }}>Resumo Geral</Title>
+      <Title style={{ padding: 10, color: '#fff' }}>Resumo Geral</Title>
       <View style={{ flexDirection: 'row', flex: 1, flexWrap: 'wrap', justifyContent: 'center' }}>
         <View>
           <Card style={styles.card}>
-            <Title style={{ textAlign: 'center' }}>Total Coletados</Title>
+            <Title style={{ textAlign: 'center', color: '#365025' }}>Total Coletados</Title>
             <Divider style={{ marginBottom: 5 }} />
-            <Title style={{ textAlign: 'center', fontSize: 30 }}>18</Title>
+            <Title style={{ textAlign: 'center', fontSize: 30, color: '#365025' }}>18</Title>
           </Card>
         </View>
 
         <View>
           <Card style={styles.card}>
-            <Title style={{ textAlign: 'center' }}>Total Destinados</Title>
+            <Title style={{ textAlign: 'center', color: '#365025' }}>Total Destinados</Title>
             <Divider style={{ marginBottom: 5 }} />
-            <Title style={{ textAlign: 'center', fontSize: 30 }}>13</Title>
+            <Title style={{ textAlign: 'center', fontSize: 30, color: '#365025' }}>13</Title>
           </Card>
         </View>
       </View>

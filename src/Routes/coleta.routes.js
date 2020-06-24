@@ -5,6 +5,7 @@ import { View, Text, StatusBar, ScrollView } from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack';
 import ColetaScreen from "../pages/admin/coleta/ColetaScreen";
 import NovaColetaScreen from "../pages/admin/coleta/NovaColetaScreen";
+import NovoProdutoScreen from "../pages/admin/coleta/NovoProdutoScreen";
 // import DetalhesScreenAdmin from "../pages/admin/ForagidosScreen/DetalhesScreen";
 // import CustomDrawerContent from '../containers/CustomDrawerContent'
 
@@ -32,6 +33,7 @@ export default function ColetaRoutes() {
           <Stack.Screen name="ColetaScreen" component={ColetaScreen} />
           {/* <Stack.Screen name="Detalhes" component={DetalhesScreenAdmin} /> */}
           <Stack.Screen name="NovaColetaScreen" component={NovaColetaScreen} />
+          <Stack.Screen name="NovoProdutoScreen" component={NovoProdutoScreen} />
         </Stack.Navigator>
       
     );
