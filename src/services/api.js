@@ -32,6 +32,10 @@ export const auth_login = `${baseUrl}/auth/login`;
 export const api_admin_usuarios = `${baseUrl}/admin/usuarios`;
 
 
+export const api_cliente = `${baseUrl}/admin/cliente`;
+export const api_produto = `${baseUrl}/admin/produto`;
+export const api_medidas = `${baseUrl}/admin/medidas`;
+
 export const api_coleta = `${baseUrl}/admin/coleta`;
 export const api_coleta_produto = `${baseUrl}/admin/coleta_produto`;
 export const api_destinacao = `${baseUrl}/admin/destinacao`;

@@ -9,13 +9,33 @@ import { Snackbar } from 'react-native-paper';
 import { Avatar, Title, Paragraph, Divider, Surface, TextInput } from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
-import { api_interno_foragidos } from '../../../../services/api'
+import { api_cliente, api_produto, api_medidas } from '../../../../services/api'
 import { useSelector } from 'react-redux';
-import { Container, Header, Content, Form, DatePicker, Picker, Text, Item, Input, Label, CheckBox, Body, ListItem, Radio, Right, Left, Button } from 'native-base';
-// import {Picker} from '@react-native-community/picker';
+import { Container, Header, Content, Form, Picker, Text, Item, Input, Label, CheckBox, Body, ListItem, Radio, Right, Left, Button } from 'native-base';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import DatePicker from '../../../../containers/DatePicker'
+import moment from 'moment'
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import MaskedInput from 'react-text-mask';
+import { dateToSQL } from '../../../../helpers/dates';
+import { isEmpty } from '../../../../helpers/isEmpty'
 
-
+function TextMaskCustom(props) {
+  const { inputRef, ...other } = props;
+  return (
+    <MaskedInput
+      {...other}
+      ref={ref => {
+        inputRef(ref ? ref.inputElement : null);
+      }}
+      guide={false}
+      mask={[/[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/, '.', /[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/, '/', /[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/, '-', /[0-9]/, /[0-9]/]}
+      placeholderChar={'\u2000'}
+      showMask
+    />
+  );
+}
 
 function NovaColetaScreen({ navigation, snackbar }) {
 
@@ -23,24 +43,55 @@ function NovaColetaScreen({ navigation, snackbar }) {
   // const [snack, setSnack] = useState(false);
   // const [date, setDate] = useState();
   const [piker1, setPiker1] = useState();
+  const [dadosCliente, setDadosCliente] = useState();
+  const [dadosProduto, setDadosProduto] = useState();
+  const [dadosMedida, setDadosMedida] = useState();
+
+  const formik = useFormik({
+    initialValues: {
+      data: "",
+      hora: "",
+      cliente_id: "",
+      user_id: "",
+      observacao: "",
+      agendado: "",
+      coletado: "",
+      produto_id: "",
+      quantidade: "",
+      tipo_medida_id: "",
+      custo: "",
+    },
+    validationSchema: yup.object({
+      // data_sind: yup.string().required("Campo obrigatório"),
+      observacao: yup.string().required("Campo obrigatório").min(19, 'O campo deve conter 16 dígitos'),
+    })
+  });
 
 //********************************** */
 
-  const [date, setDate] = useState(new Date(1598051730000));
-  const [time, setTime] = useState(new Date(1598051730000));
-  const [showDatepicker, setShowDatepicker] = useState(false);
-  const [showTimepicker, setShowTimepicker] = useState(false);
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
 
-  const onChangeDate = (event, selectedDate) => {
+  const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === 'ios');
     setDate(currentDate);
   };
-  const onChangeTime = (event, selectedTime) => {
-    const currentTime = selectedTime || time;
-    setShow(Platform.OS === 'ios');
-    setTime(currentTime);
+
+  const showMode = currentMode => {
+    setShow(true);
+    setMode(currentMode);
   };
+
+  const showDatepicker = () => {
+    showMode('date');
+  };
+
+  const showTimepicker = () => {
+    showMode('time');
+  };
+
 
   //********************************************* */
 
@@ -63,24 +114,62 @@ function NovaColetaScreen({ navigation, snackbar }) {
   // }, [navigation, setCount]);
 
 
-  const teste = async () => {
+  const buscaDados = async () => {
     try {
-      const res = await axios.get(api_interno_foragidos, {
+      const res_cliente = await axios.get(api_cliente, {
         headers: {
           'X-Requested-With': 'XMLHttpRequest',
           'Authorization': `bearer ${auth.auth.token}`
         }
       })
-      console.log(res)
+      setDadosCliente(res_cliente.data)
+      
+      const res_produto = await axios.get(api_produto, {
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'Authorization': `bearer ${auth.auth.token}`
+        }
+      })
+      setDadosProduto(res_produto.data)
+
+      const res_medidas = await axios.get(api_medidas, {
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'Authorization': `bearer ${auth.auth.token}`
+        }
+      })
+      setDadosMedida(res_medidas.data)
     } catch (error) {
       console.log(error)
     }
   };
 
+  const handleSubmit = () => {
+    // formik.handleSubmit()
+    formik.setFieldTouched('observacao', true)
+    if (!isEmpty(formik.touched)) {
+      if (isEmpty(formik.errors)){
+        console.log('SUBMIT')
+      }
+    }
+    
+  
+    
+  }
+
   const getToken = async () => {
     const token = await AsyncStorage.getItem('@SWR:usuario_token')
     console.log(token)
   };
+
+  useEffect(() => {
+    buscaDados()
+  }, [])
+
+  useEffect(() => {
+    // console.log(formik.values)
+    console.log(formik.touched)
+  }, [formik])
 
   return (
     <View style={styles.colorBackground}>
@@ -103,30 +192,17 @@ function NovaColetaScreen({ navigation, snackbar }) {
             <Divider style={{ marginBottom: 10, paddingBottom: 2 }} />
 
             <Form>
-              <Item rounded last style={{ marginBottom: 10, height: 50 }}>
-                <Label>Data</Label>
-                {showDatepicker && (
+              <Item rounded last style={{ marginBottom: 10, height: 50 }} onPress={showTimepicker}>
+                <Label onPress={showDatepicker}>{moment(date+'').format('DD/MM/YYYY')+' -'}</Label>
+                <Label onPress={showTimepicker}>{moment(date+'').format('h:mm')+' hs'}</Label>
+                {show && (
                   <DateTimePicker
-                    testID="datePicker"
+                    testID="dateTimePicker"
                     value={date}
-                    mode={'date'}
+                    mode={mode}
                     is24Hour={true}
                     display="default"
-                    onChange={onChangeDate}
-                  />
-                )}
-              </Item>
-
-              <Item rounded last style={{ marginBottom: 10, height: 50 }} onPress={() => {setShowTimepicker(true)}}>
-                <Label>Hora</Label>
-                {showTimepicker && (
-                  <DateTimePicker
-                    testID="timePicker"
-                    value={time}
-                    mode={'time'}
-                    is24Hour={true}
-                    display="default"
-                    onChange={onChangeTime}
+                    onChange={onChange}
                   />
                 )}
               </Item>
@@ -138,12 +214,10 @@ function NovaColetaScreen({ navigation, snackbar }) {
                   selectedValue={piker1}
                   onValueChange={e => setPiker1(e)}
                 >
-                  <Picker.Item label="Cliente" />
-                  <Picker.Item label="Wallet" value="key0" />
-                  <Picker.Item label="ATM Card" value="key1" />
-                  <Picker.Item label="Debit Card" value="key2" />
-                  <Picker.Item label="Credit Card" value="key3" />
-                  <Picker.Item label="Net Banking" value="key4" />
+                  <Picker.Item label="Selecione o cliente" />
+                  {dadosCliente && dadosCliente.map((cliente, idx) => (
+                    <Picker.Item key={cliente.id} label={cliente.nome} value={cliente.id} />
+                  ))}
                 </Picker>
               </Item>
 
@@ -154,12 +228,10 @@ function NovaColetaScreen({ navigation, snackbar }) {
                   selectedValue={piker1}
                   onValueChange={e => setPiker1(e)}
                 >
-                  <Picker.Item label="Produto" />
-                  <Picker.Item label="Wallet" value="key0" />
-                  <Picker.Item label="ATM Card" value="key1" />
-                  <Picker.Item label="Debit Card" value="key2" />
-                  <Picker.Item label="Credit Card" value="key3" />
-                  <Picker.Item label="Net Banking" value="key4" />
+                  <Picker.Item label="Selecione o produto"/>
+                  {dadosProduto && dadosProduto.map((prod, idx) => (
+                    <Picker.Item key={prod.id} label={prod.nome} value={prod.id} />
+                  ))}
                 </Picker>
               </Item>
 
@@ -174,12 +246,10 @@ function NovaColetaScreen({ navigation, snackbar }) {
                   selectedValue={piker1}
                   onValueChange={e => setPiker1(e)}
                 >
-                  <Picker.Item label="Unidade de medida" />
-                  <Picker.Item label="Wallet" value="key0" />
-                  <Picker.Item label="ATM Card" value="key1" />
-                  <Picker.Item label="Debit Card" value="key2" />
-                  <Picker.Item label="Credit Card" value="key3" />
-                  <Picker.Item label="Net Banking" value="key4" />
+                  <Picker.Item label="Selecione a unidade de medida" />
+                  {dadosMedida && dadosMedida.map((medida, idx) => (
+                    <Picker.Item key={medida.id} label={medida.nome_tipo} value={medida.id} />
+                  ))}
                 </Picker>
               </Item>
 
@@ -187,11 +257,16 @@ function NovaColetaScreen({ navigation, snackbar }) {
                 <Input keyboardType='number-pad' placeholder='Custo' />
               </Item>
 
-              <Item rounded last style={{ marginBottom: 10 }}>
+              <Item rounded last error={formik.errors.observacao ? true : false} style={{ marginBottom: 10 }}>
                 <Input multiline
                   placeholder='Observação'
+                  name='observacao'
+                  value={formik.values.observacao}
+                  onChangeText={formik.handleChange('observacao')}
+                  onBlur={formik.handleBlur('observacao')}
                  />
               </Item>
+              {formik.errors.observacao && <Label style={{ color: 'red', marginLeft: 10, fontSize: 14}}>{formik.errors.observacao}</Label>}
 
               {/* <ListItem>
                 <CheckBox checked={true} color="green" />
@@ -217,7 +292,7 @@ function NovaColetaScreen({ navigation, snackbar }) {
                 </Right>
               </ListItem>
 
-              <Button rounded success style={{ flex: 1, justifyContent: 'center', marginTop: 20}}>
+              <Button rounded success style={{ flex: 1, justifyContent: 'center', marginTop: 20}} onPress={handleSubmit}>
                 <Text>Salvar</Text>
               </Button>
 
