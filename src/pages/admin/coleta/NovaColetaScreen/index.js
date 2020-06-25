@@ -49,13 +49,13 @@ function NovaColetaScreen({ navigation, snackbar }) {
 
   const formik = useFormik({
     initialValues: {
-      data: "",
-      hora: "",
+      data: moment(new Date()).format('YYYY-MM-DD'),
+      hora: moment(new Date()).format('hh:mm:ss'),
       cliente_id: "",
       user_id: "",
       observacao: "",
-      agendado: "",
-      coletado: "",
+      agendado: 1,
+      coletado: 0,
       produto_id: "",
       quantidade: "",
       tipo_medida_id: "",
@@ -63,7 +63,12 @@ function NovaColetaScreen({ navigation, snackbar }) {
     },
     validationSchema: yup.object({
       // data_sind: yup.string().required("Campo obrigatório"),
-      observacao: yup.string().required("Campo obrigatório").min(19, 'O campo deve conter 16 dígitos'),
+      cliente_id: yup.string().required("Campo obrigatório"),
+      produto_id: yup.string().required("Campo obrigatório"),
+      quantidade: yup.string().required("Campo obrigatório"),
+      tipo_medida_id: yup.string().required("Campo obrigatório"),
+      custo: yup.string().required("Campo obrigatório"),
+      observacao: yup.string().required("Campo obrigatório"),
     })
   });
 
@@ -77,6 +82,8 @@ function NovaColetaScreen({ navigation, snackbar }) {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === 'ios');
     setDate(currentDate);
+    formik.setFieldValue('data', moment(currentDate).format('YYYY-MM-DD'))
+    formik.setFieldValue('hora', moment(currentDate).format('hh:mm:ss'))
   };
 
   const showMode = currentMode => {
@@ -167,8 +174,8 @@ function NovaColetaScreen({ navigation, snackbar }) {
   }, [])
 
   useEffect(() => {
-    // console.log(formik.values)
-    console.log(formik.touched)
+    console.log(formik.values)
+    // console.log(formik.touched)
   }, [formik])
 
   return (
@@ -207,55 +214,73 @@ function NovaColetaScreen({ navigation, snackbar }) {
                 )}
               </Item>
 
-              <Item rounded last style={{ marginBottom: 10 }}>
+              <Item rounded last style={{ marginBottom: 10 }} error={formik.errors.cliente_id ? true : false}>
                 <Picker
                   mode="dropdown"
                   note
-                  selectedValue={piker1}
-                  onValueChange={e => setPiker1(e)}
+                  selectedValue={formik.values.cliente_id}
+                  onValueChange={e => formik.setFieldValue('cliente_id', e)}
+                  onBlur={formik.handleBlur('cliente_id')}
                 >
-                  <Picker.Item label="Selecione o cliente" />
+                  <Picker.Item label="Selecione o cliente" value={''} />
                   {dadosCliente && dadosCliente.map((cliente, idx) => (
                     <Picker.Item key={cliente.id} label={cliente.nome} value={cliente.id} />
                   ))}
                 </Picker>
               </Item>
+              {formik.errors.cliente_id && <Label style={{ color: 'red', marginLeft: 10, fontSize: 14}}>{formik.errors.cliente_id}</Label>}
 
-              <Item rounded last style={{ marginBottom: 10 }}>
+              <Item rounded last style={{ marginBottom: 10 }} error={formik.errors.produto_id ? true : false}>
                 <Picker
                   mode="dropdown"
                   note
-                  selectedValue={piker1}
-                  onValueChange={e => setPiker1(e)}
+                  selectedValue={formik.values.produto_id}
+                  onValueChange={e => formik.setFieldValue('produto_id', e)}
+                  onBlur={formik.handleBlur('produto_id')}
                 >
-                  <Picker.Item label="Selecione o produto"/>
+                  <Picker.Item label="Selecione o produto" value={''}/>
                   {dadosProduto && dadosProduto.map((prod, idx) => (
                     <Picker.Item key={prod.id} label={prod.nome} value={prod.id} />
                   ))}
                 </Picker>
               </Item>
+              {formik.errors.produto_id && <Label style={{ color: 'red', marginLeft: 10, fontSize: 14}}>{formik.errors.produto_id}</Label>}
 
-              <Item rounded last style={{ marginBottom: 10 }}>
-                <Input keyboardType='number-pad' placeholder='Quantidade' />
+              <Item rounded last style={{ marginBottom: 10 }} error={formik.errors.quantidade ? true : false}>
+                <Input keyboardType='number-pad' placeholder='Quantidade'
+                  name='quantidade'
+                  value={formik.values.quantidade}
+                  onChangeText={formik.handleChange('quantidade')}
+                  onBlur={formik.handleBlur('quantidade')}
+                  />
               </Item>
+              {formik.errors.quantidade && <Label style={{ color: 'red', marginLeft: 10, fontSize: 14}}>{formik.errors.quantidade}</Label>}
 
-              <Item rounded last style={{ marginBottom: 10 }}>
+              <Item rounded last style={{ marginBottom: 10 }} error={formik.errors.tipo_medida_id ? true : false}>
                 <Picker
                   mode="dropdown"
                   note
-                  selectedValue={piker1}
-                  onValueChange={e => setPiker1(e)}
+                  selectedValue={formik.values.tipo_medida_id}
+                  onValueChange={e => formik.setFieldValue('tipo_medida_id', e)}
+                  onBlur={formik.handleBlur('tipo_medida_id')}
                 >
-                  <Picker.Item label="Selecione a unidade de medida" />
+                  <Picker.Item label="Selecione a unidade de medida" value={''} />
                   {dadosMedida && dadosMedida.map((medida, idx) => (
                     <Picker.Item key={medida.id} label={medida.nome_tipo} value={medida.id} />
                   ))}
                 </Picker>
               </Item>
+              {formik.errors.tipo_medida_id && <Label style={{ color: 'red', marginLeft: 10, fontSize: 14}}>{formik.errors.tipo_medida_id}</Label>}
 
-              <Item rounded last style={{ marginBottom: 10 }}>
-                <Input keyboardType='number-pad' placeholder='Custo' />
+              <Item rounded last style={{ marginBottom: 10 }} error={formik.errors.custo ? true : false}>
+                <Input keyboardType='number-pad' placeholder='Custo'
+                  name='custo'
+                  value={formik.values.custo}
+                  onChangeText={formik.handleChange('custo')}
+                  onBlur={formik.handleBlur('custo')}
+                 />
               </Item>
+              {formik.errors.custo && <Label style={{ color: 'red', marginLeft: 10, fontSize: 14}}>{formik.errors.custo}</Label>}
 
               <Item rounded last error={formik.errors.observacao ? true : false} style={{ marginBottom: 10 }}>
                 <Input multiline
@@ -275,20 +300,20 @@ function NovaColetaScreen({ navigation, snackbar }) {
                 </Body>
               </ListItem> */}
 
-              <ListItem>
+              <ListItem onPress={() => {formik.setFieldValue('agendado', 1), formik.setFieldValue('coletado', 0)}}>
                 <Left>
-                  <Text>Coleta agendada</Text>
+                  <Text>Agendar coleta</Text>
                 </Left>
                 <Right>
-                  <Radio selected={true} color="green" selectedColor='#1a1' />
+                  <Radio selected={formik.values.agendado === 1 ? true : false} color="#e8c326" selectedColor='#e8c326' onPress={() => {formik.setFieldValue('agendado', 1), formik.setFieldValue('coletado', 0)}}/>
                 </Right>
               </ListItem>
-              <ListItem>
+              <ListItem onPress={() => {formik.setFieldValue('agendado', 0), formik.setFieldValue('coletado', 1)}}>
                 <Left>
-                  <Text>Coleta finalizada</Text>
+                  <Text>Coletado agora</Text>
                 </Left>
                 <Right>
-                  <Radio selected={false} color="green" />
+                  <Radio selected={formik.values.coletado === 1 ? true : false} color="#3c3" selectedColor='#3c3' onPress={() => {formik.setFieldValue('agendado', 0), formik.setFieldValue('coletado', 1)}} />
                 </Right>
               </ListItem>
 
