@@ -33,9 +33,10 @@
     "react-native-screens": "^2.8.0",
     "react-native-vector-icons": "^6.6.0",
     "react-redux": "^7.2.0",
-    "react-text-mask": "^5.4.3",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
+    "remask": "^0.1.0-alpha.5",
+    "vanilla-masker": "^1.2.0",
     "yup": "^0.29.1"
   },
   "devDependencies": {

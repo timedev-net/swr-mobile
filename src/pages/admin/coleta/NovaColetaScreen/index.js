@@ -17,25 +17,10 @@ import DatePicker from '../../../../containers/DatePicker'
 import moment from 'moment'
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import MaskedInput from 'react-text-mask';
-import { dateToSQL } from '../../../../helpers/dates';
 import { isEmpty } from '../../../../helpers/isEmpty'
+import { mask, unMask } from 'remask'
+import { VMasker, toMoney, toPattern } from 'vanilla-masker'
 
-function TextMaskCustom(props) {
-  const { inputRef, ...other } = props;
-  return (
-    <MaskedInput
-      {...other}
-      ref={ref => {
-        inputRef(ref ? ref.inputElement : null);
-      }}
-      guide={false}
-      mask={[/[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/, '.', /[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/, '/', /[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/, '-', /[0-9]/, /[0-9]/]}
-      placeholderChar={'\u2000'}
-      showMask
-    />
-  );
-}
 
 function NovaColetaScreen({ navigation, snackbar }) {
 
@@ -68,7 +53,7 @@ function NovaColetaScreen({ navigation, snackbar }) {
       quantidade: yup.string().required("Campo obrigatório"),
       tipo_medida_id: yup.string().required("Campo obrigatório"),
       custo: yup.string().required("Campo obrigatório"),
-      observacao: yup.string().required("Campo obrigatório"),
+      // observacao: yup.string().required("Campo obrigatório"),
     })
   });
 
@@ -153,10 +138,20 @@ function NovaColetaScreen({ navigation, snackbar }) {
 
   const handleSubmit = () => {
     // formik.handleSubmit()
-    formik.setFieldTouched('observacao', true)
+
+    console.log(toMoney(1234))
+    console.log(toPattern(1234, "(99) 9999-9999"))
+    
+
+    formik.setFieldTouched('cliente_id', true)
+    formik.setFieldTouched('produto_id', true)
+    formik.setFieldTouched('quantidade', true)
+    formik.setFieldTouched('tipo_medida_id', true)
+    formik.setFieldTouched('custo', true)
     if (!isEmpty(formik.touched)) {
       if (isEmpty(formik.errors)){
         console.log('SUBMIT')
+
       }
     }
     
@@ -174,7 +169,7 @@ function NovaColetaScreen({ navigation, snackbar }) {
   }, [])
 
   useEffect(() => {
-    console.log(formik.values)
+    console.log(mask(formik.values.custo, ['999.999.999']))
     // console.log(formik.touched)
   }, [formik])
 
@@ -191,7 +186,7 @@ function NovaColetaScreen({ navigation, snackbar }) {
       </Appbar.Header>
 
       <ScrollView style={{ padding: 10 }}>
-        <Card>
+        <Card style={{ marginBottom: 20 }}>
           {/* <Card.Cover source={{ uri: 'http://www.nueva-iso-14001.com/wp-content/uploads/2018/10/pol%C3%ADtica-ambiental.jpg' }} /> */}
           <Card.Content style={{ backgroundColor: '#fff' }}>
             <Title>Nova Coleta</Title>
@@ -199,8 +194,9 @@ function NovaColetaScreen({ navigation, snackbar }) {
             <Divider style={{ marginBottom: 10, paddingBottom: 2 }} />
 
             <Form>
-              <Item rounded last style={{ marginBottom: 10, height: 50 }} onPress={showTimepicker}>
-                <Label onPress={showDatepicker}>{moment(date+'').format('DD/MM/YYYY')+' -'}</Label>
+              <Item rounded last style={{ height: 50 }} onPress={showDatepicker}>
+              <Label style={{ color: '#aaa'}} >Data e hora: </Label>
+                <Label style={{ color: '#000'}} onPress={showDatepicker}>{moment(date+'').format('DD/MM/YYYY')+' -'}</Label>
                 <Label onPress={showTimepicker}>{moment(date+'').format('h:mm')+' hs'}</Label>
                 {show && (
                   <DateTimePicker
@@ -214,8 +210,8 @@ function NovaColetaScreen({ navigation, snackbar }) {
                 )}
               </Item>
 
-              <Item rounded last style={{ marginBottom: 10 }} error={formik.errors.cliente_id ? true : false}>
-                <Picker
+              <Item rounded last style={{ marginTop: 10 }} error={formik.touched.cliente_id && formik.errors.cliente_id ? true : false}>
+                <Picker style={{ color: '#000'}}
                   mode="dropdown"
                   note
                   selectedValue={formik.values.cliente_id}
@@ -228,10 +224,10 @@ function NovaColetaScreen({ navigation, snackbar }) {
                   ))}
                 </Picker>
               </Item>
-              {formik.errors.cliente_id && <Label style={{ color: 'red', marginLeft: 10, fontSize: 14}}>{formik.errors.cliente_id}</Label>}
+              {formik.touched.cliente_id && formik.errors.cliente_id && <Label style={{ color: 'red', marginLeft: 10, fontSize: 14}}>{formik.errors.cliente_id}</Label>}
 
-              <Item rounded last style={{ marginBottom: 10 }} error={formik.errors.produto_id ? true : false}>
-                <Picker
+              <Item rounded last style={{ marginTop: 10 }} error={formik.touched.produto_id && formik.errors.produto_id ? true : false}>
+                <Picker style={{ color: '#000'}}
                   mode="dropdown"
                   note
                   selectedValue={formik.values.produto_id}
@@ -244,19 +240,20 @@ function NovaColetaScreen({ navigation, snackbar }) {
                   ))}
                 </Picker>
               </Item>
-              {formik.errors.produto_id && <Label style={{ color: 'red', marginLeft: 10, fontSize: 14}}>{formik.errors.produto_id}</Label>}
+              {formik.touched.produto_id && formik.errors.produto_id && <Label style={{ color: 'red', marginLeft: 10, fontSize: 14}}>{formik.errors.produto_id}</Label>}
 
-              <Item rounded last style={{ marginBottom: 10 }} error={formik.errors.quantidade ? true : false}>
+              <Item rounded last style={{ marginTop: 10 }} error={formik.touched.quantidade && formik.errors.quantidade ? true : false}>
+                <Label style={{ color: '#aaa'}} >Quantidade: </Label>
                 <Input keyboardType='number-pad' placeholder='Quantidade'
                   name='quantidade'
-                  value={formik.values.quantidade}
+                  value={`${toMoney(formik.values.quantidade)} ${dadosMedida && dadosMedida[formik.values.tipo_medida_id-1]?.nome_tipo? dadosMedida[formik.values.tipo_medida_id-1].nome_tipo : '' }`}
                   onChangeText={formik.handleChange('quantidade')}
                   onBlur={formik.handleBlur('quantidade')}
                   />
               </Item>
-              {formik.errors.quantidade && <Label style={{ color: 'red', marginLeft: 10, fontSize: 14}}>{formik.errors.quantidade}</Label>}
+              {formik.touched.quantidade && formik.errors.quantidade && <Label style={{ color: 'red', marginLeft: 10, fontSize: 14}}>{formik.errors.quantidade}</Label>}
 
-              <Item rounded last style={{ marginBottom: 10 }} error={formik.errors.tipo_medida_id ? true : false}>
+              <Item rounded last style={{ marginTop: 10 }} error={formik.touched.tipo_medida_id && formik.errors.tipo_medida_id ? true : false}>
                 <Picker
                   mode="dropdown"
                   note
@@ -270,19 +267,20 @@ function NovaColetaScreen({ navigation, snackbar }) {
                   ))}
                 </Picker>
               </Item>
-              {formik.errors.tipo_medida_id && <Label style={{ color: 'red', marginLeft: 10, fontSize: 14}}>{formik.errors.tipo_medida_id}</Label>}
+              {formik.touched.tipo_medida_id && formik.errors.tipo_medida_id && <Label style={{ color: 'red', marginLeft: 10, fontSize: 14}}>{formik.errors.tipo_medida_id}</Label>}
 
-              <Item rounded last style={{ marginBottom: 10 }} error={formik.errors.custo ? true : false}>
+              <Item rounded last style={{ marginTop: 10 }} error={formik.touched.custo && formik.errors.custo ? true : false}>
+                <Label style={{ color: '#aaa'}} >Custo: </Label>
                 <Input keyboardType='number-pad' placeholder='Custo'
                   name='custo'
-                  value={formik.values.custo}
+                  value={'R$ ' +toMoney(formik.values.custo)}
                   onChangeText={formik.handleChange('custo')}
                   onBlur={formik.handleBlur('custo')}
                  />
               </Item>
-              {formik.errors.custo && <Label style={{ color: 'red', marginLeft: 10, fontSize: 14}}>{formik.errors.custo}</Label>}
+              {formik.touched.custo && formik.errors.custo && <Label style={{ color: 'red', marginLeft: 10, fontSize: 14}}>{formik.errors.custo}</Label>}
 
-              <Item rounded last error={formik.errors.observacao ? true : false} style={{ marginBottom: 10 }}>
+              <Item rounded last style={{ marginTop: 10 }} error={formik.touched.observacao && formik.errors.observacao ? true : false}>
                 <Input multiline
                   placeholder='Observação'
                   name='observacao'
@@ -291,14 +289,7 @@ function NovaColetaScreen({ navigation, snackbar }) {
                   onBlur={formik.handleBlur('observacao')}
                  />
               </Item>
-              {formik.errors.observacao && <Label style={{ color: 'red', marginLeft: 10, fontSize: 14}}>{formik.errors.observacao}</Label>}
-
-              {/* <ListItem>
-                <CheckBox checked={true} color="green" />
-                <Body>
-                  <Text style={{ color: '#fff' }}>Coleta finalizada</Text>
-                </Body>
-              </ListItem> */}
+              {formik.touched.observacao && formik.errors.observacao && <Label style={{ color: 'red', marginLeft: 10, fontSize: 14}}>{formik.errors.observacao}</Label>}
 
               <ListItem onPress={() => {formik.setFieldValue('agendado', 1), formik.setFieldValue('coletado', 0)}}>
                 <Left>
