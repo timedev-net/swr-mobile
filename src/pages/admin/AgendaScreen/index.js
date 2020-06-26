@@ -84,7 +84,7 @@ function AgendaScreen({ navigation, snackbar }) {
     </Appbar.Header>)
   
 
-  return (<>
+  return (<>{getHeader}
         <Agenda
           // The list of items that have to be displayed in agenda. If you want to render item as empty date
           // the value of date key has to be an empty array []. If there exists no value for date key it is
@@ -116,7 +116,7 @@ function AgendaScreen({ navigation, snackbar }) {
           // Specify how empty date content with no items should be rendered
           renderEmptyDate={() => {return (<View style={{ marginTop: 50, borderBottomWidth: 1, borderColor: '#000', paddingLeft:10 }}><Text>Sem Evento!</Text></View>);}}
           // Specify what should be rendered instead of ActivityIndicator
-          renderEmptyData = {() => {return (<View><Text>Não há eventos neste dia</Text></View>);}}
+          renderEmptyData = {() => {return (<View><Text>Não há eventos nesta data</Text></View>);}}
           // Specify your item comparison function for increased performance
           rowHasChanged={(r1, r2) => {return r1.text !== r2.text}}
         
