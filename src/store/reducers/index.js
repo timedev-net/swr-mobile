@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
 import auth from './auth/authReducer'
-import foragidos from './foragidos/foragidosReducer'
+import coleta from './coleta/coletaReducer'
 
 export default combineReducers({
   auth,
-  foragidos,
+  coleta,
 })

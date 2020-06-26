@@ -7,6 +7,8 @@ import { useSelector } from 'react-redux';
 import styles from './styles'
 import axios from 'axios';
 import moment from 'moment';
+import { index_coleta } from '../../../../store/reducers/coleta/coletaReducer';
+import { useDispatch } from 'react-redux';
 
 import { View, StatusBar, ScrollView, Image } from 'react-native'
 import { Icon } from 'react-native-elements'
@@ -18,18 +20,20 @@ import { Container, Header, Content, Form, DatePicker, Picker, Text, Item, Input
 function ColetaScreen({ navigation, snackbar }) {
 
   const auth = useSelector(state => state.auth)
+  const storeRedux = useSelector(state => state)
+  const dispatch = useDispatch()
   // const [snack, setSnack] = useState(false);
   const [date, setDate] = useState();
   const [piker1, setPiker1] = useState();
   const [menuVisible, setMenuVisible] = useState(false);
-  const [dadosColeta, setDadosColeta] = useState();
 
   // goBack = () => console.log('Went back');
   // handleSearch = () => console.log('Searching');
   const handleMore = () => {
     setMenuVisible(!menuVisible)
+    // dispatch(index_coleta(['tessssssssddddddddddssssssssste']))
+    // console.log(storeRedux.coleta.dados_api)
   }
-
 
 
   // useEffect(() => {
@@ -53,7 +57,7 @@ function ColetaScreen({ navigation, snackbar }) {
           'Authorization': `bearer ${auth.auth.token}`
         }
       })
-      setDadosColeta(res.data)  
+      dispatch(index_coleta(res.data))
     } catch (error) {
       console.log(error)
     }
@@ -99,9 +103,9 @@ function ColetaScreen({ navigation, snackbar }) {
             <Divider style={{ marginBottom: 10, paddingBottom: 2 }} />
 
             <List.AccordionGroup>
-              {dadosColeta? dadosColeta.map((coleta, idx) => (
-                <View>
-                  <List.Accordion key={coleta.id} title={`${moment(coleta.data).format('DD/MM/YYYY')} - ${coleta.cliente.nome}`} id="1">
+              {storeRedux.coleta.dados_api? storeRedux.coleta.dados_api.map((coleta, idx) => (
+                <View key={coleta.id}>
+                  <List.Accordion title={`${moment(coleta.data).format('DD/MM/YYYY')} - ${coleta.cliente.nome}`} id={coleta.id}>
                     {coleta?.produto_coleta? coleta.produto_coleta.map((produto, indice) => (
                       <List.Item key={produto.id} title={`${indice+1}. ${produto.produto.nome} (${produto.quantidade} ${produto.tipo_medida.nome_tipo})`} style={{ marginLeft: 20 }} />
                     )) : null}

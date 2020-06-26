@@ -20,6 +20,7 @@ import SplashScreen from "../pages/SplashScreen";
 import UserNotActiveScreen from "../pages/UserNotActiveScreen";
 // PAGES DE ADMIN
 import HomeScreenAdmin from "../pages/admin/HomeScreen";
+import AgendaScreen from "../pages/admin/AgendaScreen";
 import SobreEmpresaScreenAdmin from "../pages/admin/SobreEmpresaScreen";
 
 
@@ -86,6 +87,7 @@ const Routes = () => {
         <StatusBar barStyle="#fff" backgroundColor={theme_dark.colors.drawer} />
         <Drawer.Navigator drawerContent={props => <CustomDrawerContent {...props} />}>
           <Drawer.Screen name="Home" component={HomeScreenAdmin} />
+          <Drawer.Screen name="Agenda" component={AgendaScreen} />
           {/* <Drawer.Screen name="Foragidos1" component={ForagidosScreenAdmin} /> */}
           <Drawer.Screen name="Coleta" component={ColetaRoutes} />
           {/* <Drawer.Screen name="Consulta" component={ConsultaScreenAdmin} options={{title: 'Consulta'}} /> */}

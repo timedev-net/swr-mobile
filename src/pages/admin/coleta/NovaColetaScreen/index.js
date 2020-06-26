@@ -9,7 +9,7 @@ import { Snackbar } from 'react-native-paper';
 import { Avatar, Title, Paragraph, Divider, Surface, TextInput } from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
-import { api_cliente, api_produto, api_medidas } from '../../../../services/api'
+import { api_cliente, api_produto, api_medidas, api_coleta } from '../../../../services/api'
 import { useSelector } from 'react-redux';
 import { Container, Header, Content, Form, Picker, Text, Item, Input, Label, CheckBox, Body, ListItem, Radio, Right, Left, Button } from 'native-base';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -17,14 +17,18 @@ import DatePicker from '../../../../containers/DatePicker'
 import moment from 'moment'
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { isEmpty } from '../../../../helpers/isEmpty'
-import { mask, unMask } from 'remask'
-import { VMasker, toMoney, toPattern } from 'vanilla-masker'
+import { isEmpty, moneyToAPI, qtdToAPI } from '../../../../helpers'
+import { mask, unMask as uMask } from 'remask'
+import VMasker, { toMoney, toPattern, maskMoney, toNumber, unMask } from 'vanilla-masker'
+import { index_coleta } from '../../../../store/reducers/coleta/coletaReducer';
+import { useDispatch } from 'react-redux';
 
 
 function NovaColetaScreen({ navigation, snackbar }) {
 
   const auth = useSelector(state => state.auth)
+  const storeRedux = useSelector(state => state)
+  const dispatch = useDispatch()
   // const [snack, setSnack] = useState(false);
   // const [date, setDate] = useState();
   const [piker1, setPiker1] = useState();
@@ -37,7 +41,6 @@ function NovaColetaScreen({ navigation, snackbar }) {
       data: moment(new Date()).format('YYYY-MM-DD'),
       hora: moment(new Date()).format('hh:mm:ss'),
       cliente_id: "",
-      user_id: "",
       observacao: "",
       agendado: 1,
       coletado: 0,
@@ -91,8 +94,6 @@ function NovaColetaScreen({ navigation, snackbar }) {
   // handleSearch = () => console.log('Searching');
   const handleMore = () => console.log('Shown more');
 
-
-
   // useEffect(() => {
   //   setSnack(true)
   // }, [snackbar]);
@@ -136,12 +137,11 @@ function NovaColetaScreen({ navigation, snackbar }) {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // formik.handleSubmit()
-
-    console.log(toMoney(1234))
-    console.log(toPattern(1234, "(99) 9999-9999"))
-    
+    const cpf = await AsyncStorage.getItem('@SWR:usuario_cpf')
+    // const val = formik.values.hora
+    // console.log(val)
 
     formik.setFieldTouched('cliente_id', true)
     formik.setFieldTouched('produto_id', true)
@@ -151,27 +151,50 @@ function NovaColetaScreen({ navigation, snackbar }) {
     if (!isEmpty(formik.touched)) {
       if (isEmpty(formik.errors)){
         console.log('SUBMIT')
+        try {
+          await axios.post(api_coleta, {
+            data: moment(formik.values.data).format('YYYY-MM-DD'),
+            hora: formik.values.hora,
+            cliente_id: formik.values.cliente_id,
+            usuario_cpf: cpf,
+            observacao: formik.values.observacao,
+            agendado: formik.values.agendado,
+            coletado: formik.values.coletado,
+            produto_id: formik.values.produto_id,
+            quantidade: qtdToAPI(toNumber(formik.values.quantidade)),
+            tipo_medida_id: formik.values.tipo_medida_id,
+            custo: moneyToAPI(toNumber(formik.values.custo)),
+          }, {
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest',
+              'Authorization': `bearer ${auth.auth.token}`
+            }
+          })
 
+        // recarrega os dados do state redux
+          const res = await axios.get(api_coleta, {
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest',
+              'Authorization': `bearer ${auth.auth.token}`
+            }
+          })
+          dispatch(index_coleta(res.data))
+        } catch (error) {
+          console.log(error)
+        }
+        navigation.goBack()
       }
     }
-    
-  
-    
   }
-
-  const getToken = async () => {
-    const token = await AsyncStorage.getItem('@SWR:usuario_token')
-    console.log(token)
-  };
 
   useEffect(() => {
     buscaDados()
   }, [])
 
-  useEffect(() => {
-    console.log(mask(formik.values.custo, ['999.999.999']))
-    // console.log(formik.touched)
-  }, [formik])
+  // useEffect(() => {
+  //   console.log(formik.values)
+  //   // console.log(formik.touched)
+  // }, [formik])
 
   return (
     <View style={styles.colorBackground}>
@@ -246,7 +269,11 @@ function NovaColetaScreen({ navigation, snackbar }) {
                 <Label style={{ color: '#aaa'}} >Quantidade: </Label>
                 <Input keyboardType='number-pad' placeholder='Quantidade'
                   name='quantidade'
-                  value={`${toMoney(formik.values.quantidade)} ${dadosMedida && dadosMedida[formik.values.tipo_medida_id-1]?.nome_tipo? dadosMedida[formik.values.tipo_medida_id-1].nome_tipo : '' }`}
+                  value={`${toMoney(formik.values.quantidade, {
+                    precision: 3,
+                    separator: ',',
+                    delimiter: '.',
+                  })} ${dadosMedida && dadosMedida[formik.values.tipo_medida_id-1]?.nome_tipo? dadosMedida[formik.values.tipo_medida_id-1].nome_tipo : '' }`}
                   onChangeText={formik.handleChange('quantidade')}
                   onBlur={formik.handleBlur('quantidade')}
                   />
@@ -273,7 +300,12 @@ function NovaColetaScreen({ navigation, snackbar }) {
                 <Label style={{ color: '#aaa'}} >Custo: </Label>
                 <Input keyboardType='number-pad' placeholder='Custo'
                   name='custo'
-                  value={'R$ ' +toMoney(formik.values.custo)}
+                  value={toMoney(formik.values.custo, {
+                    precision: 2,
+                    separator: ',',
+                    delimiter: '.',
+                    unit: 'R$',
+                  })}
                   onChangeText={formik.handleChange('custo')}
                   onBlur={formik.handleBlur('custo')}
                  />

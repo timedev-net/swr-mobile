@@ -25,20 +25,21 @@ function SobreEmpresaScreen({ navigation, snackbar }) {
     return (
       <View style={styles.colorBackground}>
 
-      <Appbar.Header style={{ justifyContent: 'space-between', backgroundColor: theme_dark.colors.drawer }}>
+      <Appbar.Header style={{ justifyContent: 'space-between', backgroundColor: '#fff' }}>
         {/* <Appbar.BackAction onPress={goBack} /> */}
         <Appbar.Action icon="menu" onPress={() => navigation.toggleDrawer()} />
         <Image style={{ width: 191, height: 36 }} source={require('../../../assets/logos/topbar-verde.png')} />
         {/* <Appbar.Content title="WR Ambiental" subtitle="Sistema de cadastro de coletas"/> */}
         {/* <Appbar.Action icon="magnify" onPress={handleSearch}/> */}
-        <Appbar.Action icon="dots-vertical" onPress={handleMore} />
+        <Appbar.Action />
       </Appbar.Header>
 
       <ScrollView style={{ padding: 10 }}>
         {/* <Title>Saiba mais sobre a Empresa</Title> */}
         <Card>
-          <Card.Cover source={{ uri: 'http://www.nueva-iso-14001.com/wp-content/uploads/2018/10/pol%C3%ADtica-ambiental.jpg' }} />
-          <Card.Content style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: theme_dark.colors.drawer }}>
+          <Card.Cover source={require('../../../assets/images/ambiental.jpg')} />
+          {/* <Card.Cover source={{ uri: 'http://www.nueva-iso-14001.com/wp-content/uploads/2018/10/pol%C3%ADtica-ambiental.jpg' }} /> */}
+          <Card.Content style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: theme_default.colors.drawer }}>
 
             <Title style={{ fontSize: 16, }}>O que é a WR Ambiental?</Title>
             <Divider style={{ marginBottom: 10, paddingBottom: 2 }} />
@@ -46,7 +47,8 @@ function SobreEmpresaScreen({ navigation, snackbar }) {
             <Text style={styles.justifyText}>
               <Paragraph>{"\t"}{"\t"}{"\t"}{"\t"}A WR Ambiental é uma empresa de gestão ambiental que auxilia o comércio e o meio ambiente a gerenciar o lixo e dejetos recicláveis,
 transformando-os em novas matéria prima e destinando-os a reutilização.</Paragraph>
-              <Paragraph>{"\n"}{"\n"}{"\t"}{"\t"}{"\t"}{"\t"}O Sistema SWR foi desenvolvido para atender a logística de coleta e destinação, bem como gerenciar e controlar todo o processo de transformação dos resíduos recicláveis. As informações do SWR são utilizados internamente pela Diretoria e seus colaboradores.{"\n"}</Paragraph>
+              <Paragraph>{"\n"}{"\n"}{"\t"}{"\t"}{"\t"}{"\t"}O aplicativo WR Ambiental foi desenvolvido para atender a logística de coleta e destinação, bem como gerenciar e controlar todo o processo de transformação dos resíduos
+              recicláveis. As informações do aplicativo são utilizados internamente pela Direção e seus colaboradores.{"\n"}</Paragraph>
             </Text>
           </Card.Content>
         </Card>
